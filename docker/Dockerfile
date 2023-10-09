@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
 
 # Install MMCV
 RUN pip install --no-cache-dir --upgrade pip wheel setuptools
+RUN pip install --no-cache-dir yapf==v0.40.1
 RUN pip install --no-cache-dir mmcv-full==1.5.2 -f https://download.openmmlab.com/mmcv/dist/cu111/torch1.9.0/index.html
 RUN pip install setuptools==59.5.0
 
