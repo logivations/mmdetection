@@ -25,7 +25,7 @@ RUN pip install setuptools==59.5.0
 
 # Install MMDetection
 RUN conda clean --all
-RUN git clone https://github.com/open-mmlab/mmdetection.git /mmdetection
+RUN git clone https://github.com/logivations/mmdetection.git /mmdetection
 WORKDIR /mmdetection
 ENV FORCE_CUDA="1"
 RUN pip install --no-cache-dir -r requirements/build.txt
