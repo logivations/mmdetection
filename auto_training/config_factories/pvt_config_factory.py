@@ -18,8 +18,6 @@ def make_pvt_cfg(data_path: str,
     cfg.train_img_prefix = f"{cfg.data_root}/train/image_2"
     cfg.val_ann_file = f"{cfg.data_root}/val/coco_val.json"
     cfg.val_img_prefix = f"{cfg.data_root}/val/image_2/"
-    cfg.test_ann_file = f"{cfg.data_root}/test/coco_test.json"
-    cfg.test_img_prefix = f"{cfg.data_root}/test/image_2/"
 
     min_res = (input_res[0], input_res[1] * 0.8)
     training_classes = parse_training_data_classes(cfg.train_ann_file)
@@ -129,8 +127,8 @@ def make_pvt_cfg(data_path: str,
             ]),
         test=dict(
             type=cfg.dataset_type,
-            ann_file=cfg.test_ann_file,
-            img_prefix=cfg.test_img_prefix,
+            ann_file=cfg.val_ann_file,
+            img_prefix=cfg.val_img_prefix,
             pipeline=[
                 dict(type='LoadImageFromFile'),
                 dict(

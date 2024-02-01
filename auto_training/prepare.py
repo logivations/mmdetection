@@ -16,25 +16,23 @@ def prepare_folder(image_path, coco_path, coco, mode):
         json.dump(coco, fp)
 
 
-def make_coco_folder(cocos, coco_path, train_image_path, val_image_path, test_image_path):
+def make_coco_folder(cocos, coco_path, train_image_path, val_image_path):
     prepare_folder(train_image_path, coco_path, cocos[0], mode="train")
     prepare_folder(val_image_path, coco_path, cocos[1], mode="val")
-    prepare_folder(test_image_path, coco_path, cocos[2], mode="test")
 
 
 
 def main():
     args = parse_args()
     target_class_map = json.loads(args.target_class_map)
-    cocos = convert_kitti_files(args.kitti_train, args.kitti_val, args.kitti_test, target_class_map)
-    make_coco_folder(cocos, args.coco_folder, args.kitti_train, args.kitti_val, args.kitti_test)
+    cocos = convert_kitti_files(args.kitti_train, args.kitti_val, target_class_map)
+    make_coco_folder(cocos, args.coco_folder, args.kitti_train, args.kitti_val)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert kitti to coco dataset')
     parser.add_argument('kitti_train', type=str, help='train input data path, kitti dataset')
     parser.add_argument('kitti_val', type=str, help='val input data path, kitti dataset')
-    parser.add_argument('kitti_test', type=str, help='test input data path, kitti dataset')
     parser.add_argument('coco_folder', type=str, help='output folder')
     parser.add_argument('--target-class-map', type=str, default="{}", help='target class mapping, json strin format. Map to None if class should not be used.')
     return parser.parse_args()

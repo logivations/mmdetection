@@ -73,13 +73,13 @@ def read_files_make_dict(path):
     path_dict = {os.path.basename(file): file for file in files}
     return files, path_dict
 
-def convert_kitti_files(train_path, val_path, test_path, target_class_map={}):
+def convert_kitti_files(train_path, val_path, target_class_map={}):
     image_ids = 0
     category_ids = 0
     annot_ids = 0
     categories = {}
     cocos = []
-    for path in train_path, val_path, test_path:
+    for path in train_path, val_path:
         image_dict = {}
         annot_dict = {}
         files, path_dict = read_files_make_dict(path)
