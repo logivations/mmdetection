@@ -61,8 +61,12 @@ class Inference:
 
     def run(self, threshold=0.5):
         results = []
+        num_images = len(os.listdir(self.inf_dir))
+        counter = 0
         for imn in os.listdir(self.inf_dir):
             img = f"{self.inf_dir}/{imn}"
+            if counter % 100 == 0:
+                print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - mmdet - INFO - Predict({counter}/{num_images})")
             self.fps_logger.start_record()
             result = inference_detector(self.model, img)
             results.append({img: extract_bounding_boxes(result, threshold)})
@@ -74,6 +78,7 @@ class Inference:
                     out_file=f"{self.inf_out_dir}/{imn}",
                     score_thr=threshold,
                 )
+            counter += 1
         if self.output_file:
             with open(self.output_file, "w") as f:
                 json.dump(results, f)
