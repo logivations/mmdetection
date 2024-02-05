@@ -20,12 +20,13 @@ import argparse
 
 
 class FPSLogger:
-    def __init__(self):
+    def __init__(self, num_of_images):
         self.tottime = 0.0
         self.count = 0
         self.last_record = 0.0
         self.last_print = time.time()
         self.interval = 10
+        self.num_of_images = num_of_images
 
     def start_record(self):
         self.last_record = time.time()
@@ -37,7 +38,8 @@ class FPSLogger:
 
     def print_fps(self):
         if time.time() - self.last_print > self.interval:
-            print(f"Inference running at {self.count / self.tottime:.3f} FPS")
+            print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - mmdet - INFO - Predict({self.count}/{self.num_of_images}) "
+                  f"- Inference running at {self.count / self.tottime:.3f} FPS")
             self.last_print = time.time()
 
 
@@ -56,7 +58,7 @@ class Inference:
         self.inf_dir = inf_dir
         self.inf_out_dir = inf_out_dir
         self.output_file = output_file
-        self.fps_logger = FPSLogger()
+        self.fps_logger = FPSLogger(len(os.listdir(self.inf_dir)))
         self.run(threshold)
 
     def run(self, threshold=0.5):
