@@ -9,7 +9,7 @@
 #######################################################################################################################
 #######################################################################################################################
 
-# 1/2 This pipeline would be used after each merge request  to build ml_all:latest docker image
+# This pipeline would be used after each merge request  to build mmdetection:latest docker image
 kind: pipeline
 type: docker
 name: mmdetecion LS_mmdet_latest
