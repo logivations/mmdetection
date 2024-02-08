@@ -36,11 +36,11 @@ steps:
       dockerfile: docker/Dockerfile
       context: docker/
       registry: quay.io
-      repo: quay.io/logivations/mmdetecion
+      repo: quay.io/logivations/ml_all
       privileged: true
       build_args:
         - BUILDKIT_INLINE_CACHE=1
-      cache_from: quay.io/logivations/mmdetecion:LS_mmdet_latest
+      cache_from: quay.io/logivations/ml_all:LS_mmdet_latest
       tags:
         - LS_mmdet_latest
         - LS_mmdet_latest_${DRONE_COMMIT_SHA}
@@ -87,13 +87,13 @@ steps:
       dockerfile: docker/Dockerfile
       context: docker/
       registry: quay.io
-      repo: quay.io/logivations/mmdetecion
+      repo: quay.io/logivations/ml_all
       privileged: true
       build_args:
         - BUILDKIT_INLINE_CACHE=1
       cache_from: 
-        - quay.io/logivations/mmdetecion:LS_mmdet_latest
-        - quay.io/logivations/mmdetecion:LS_mmdet_pr${DRONE_PULL_REQUEST}
+        - quay.io/logivations/ml_all:LS_mmdet_latest
+        - quay.io/logivations/ml_all:LS_mmdet_pr${DRONE_PULL_REQUEST}
       tags:
         - LS_mmdet_pr${DRONE_PULL_REQUEST}
         - LS_mmdet_pr${DRONE_PULL_REQUEST}_${DRONE_COMMIT_SHA}
