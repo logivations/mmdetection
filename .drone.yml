@@ -40,7 +40,7 @@ steps:
       privileged: true
       build_args:
         - BUILDKIT_INLINE_CACHE=1
-      cache_from: quay.io/logivations/ml_all:LS_mmdet_latest
+      no_cache: true
       tags:
         - LS_mmdet_latest
         - LS_mmdet_latest_${DRONE_COMMIT_SHA}
@@ -67,7 +67,7 @@ type: docker
 name: PR validation build mmdetecion images
 
 platform:
-  arch: arm64
+  arch: amd64
   os: linux
 
 trigger:
