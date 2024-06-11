@@ -3,7 +3,6 @@
 MODEL_DIR=$1
 MODEL_DIR=${MODEL_DIR%%/}
 shift
-current_date=$(date +"%d_%m_%Y")
 
 CLASSES=( "$@" )
 CLASSES=$(IFS=';' ; echo "${CLASSES[*]}")
@@ -17,8 +16,8 @@ offsets=123.675;116.28;103.53
 model-color-format=0
 scaling-filter=3 # 0=Nearest, 1=Bilinear 2=VIC-5 Tap interpolation 3=VIC-10 Tap interpolation
 
-onnx-file=pvt_detector_$current_date.onnx
-model-engine-file=pvt_detector_$current_date.onnx_b1_gpu0_fp16.engine
+onnx-file=pvt_detector.onnx
+model-engine-file=pvt_detector.onnx_b1_gpu0_fp16.engine
 
 # model config
 infer-dims=3;384;512

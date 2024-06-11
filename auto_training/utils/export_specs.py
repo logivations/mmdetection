@@ -116,9 +116,9 @@ def export_for_lv(args):
     cfg.author = args.author
     export_folder = os.path.join(cfg.work_dir, "export")
     recreate_dir(export_folder)
-    model_name = f"pvt_detector_{cfg.project_name}_{time.strftime('%y%m%d')}"
+    model_name = "pvt_detector"
     write_detector_yaml(cfg=cfg, write_dir=export_folder, name=model_name)
-    write_deepstream_config(cfg=cfg, write_dir=export_folder, name=model_name)
+    #write_deepstream_config(cfg=cfg, write_dir=export_folder, name=model_name)
     write_info_file(cfg=cfg, write_dir=export_folder)
     copy_training_specs(cfg=cfg, write_dir=export_folder)
     print(f"Training info exported successfully to: {export_folder}")
