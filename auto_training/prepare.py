@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from mmcv import DictAction
 
 from auto_training.utils.kitti_conversion import convert_kitti_files
 from auto_training.utils.utils import copy_images
@@ -25,8 +26,7 @@ def make_coco_folder(cocos, coco_path, train_image_path, val_image_path, test_im
 
 def main():
     args = parse_args()
-    target_class_map = json.loads(args.target_class_map)
-    cocos = convert_kitti_files(args.kitti_train, args.kitti_val, args.kitti_test, target_class_map)
+    cocos = convert_kitti_files(args.kitti_train, args.kitti_val, args.kitti_test, args.target_class_map)
     make_coco_folder(cocos, args.coco_folder, args.kitti_train, args.kitti_val, args.kitti_test)
 
 
@@ -36,7 +36,12 @@ def parse_args():
     parser.add_argument('kitti_val', type=str, help='val input data path, kitti dataset')
     parser.add_argument('kitti_test', type=str, help='test input data path, kitti dataset')
     parser.add_argument('coco_folder', type=str, help='output folder')
-    parser.add_argument('--target-class-map', type=str, default="{}", help='target class mapping, json strin format. Map to None if class should not be used.')
+    parser.add_argument(
+        '--target-class-map',
+        nargs='+',
+        action=DictAction,
+        default={},
+        help='target class mapping, json string format. Map to None if class should not be used.')
     return parser.parse_args()
 
 

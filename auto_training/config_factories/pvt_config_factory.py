@@ -76,10 +76,8 @@ def make_pvt_cfg(data_path: str,
             times=8,
             dataset=dict(
                 type=cfg.dataset_type,
-                ann_file=
-                cfg.train_ann_file,
-                img_prefix=
-                cfg.train_img_prefix,
+                ann_file=cfg.train_ann_file,
+                img_prefix=cfg.train_img_prefix,
                 pipeline=[
                     dict(type='LoadImageFromFile'),
                     dict(type='LoadAnnotations', with_bbox=True),
