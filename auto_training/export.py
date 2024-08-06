@@ -157,7 +157,7 @@ if __name__ == '__main__':
         verify=args.verify,
         test_img=args.test_img,
         do_simplify=args.simplify,
-        dynamic_export=args.dynamic_export,
+        dynamic_export=True,
         skip_postprocess=args.skip_postprocess)
 
     # Following strings of text style are from colorama package
