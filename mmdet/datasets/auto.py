@@ -517,19 +517,22 @@ class AutoDataset(CustomDataset):
                             ap = np.mean(precision)
                         else:
                             ap = float('nan')
-                        results_per_category.append(
-                            (f'{nm["name"]}', f'{float(ap):0.3f}'))
 
-                    num_columns = min(6, len(results_per_category) * 2)
-                    results_flatten = list(
-                        itertools.chain(*results_per_category))
-                    headers = ['category', 'AP'] * (num_columns // 2)
-                    results_2d = itertools.zip_longest(*[
-                        results_flatten[i::num_columns]
-                        for i in range(num_columns)
-                    ])
+                        recalls = cocoEval.eval['recall'][:, idx, 0, -1]
+                        recalls = recalls[recalls > -1]
+                        if precision.size and recalls.size:
+                            mean_precision = np.mean(precision)
+                            mean_recall = np.mean(recalls)
+                            if (mean_precision + mean_recall) > 0:
+                                f1 = 2 * (mean_precision * mean_recall) / (mean_precision + mean_recall)
+                            else:
+                                f1 = float('nan')
+                        else:
+                            f1 = float('nan')
+                        results_per_category.append(
+                            (f'{nm["name"]}', f'{float(ap):0.3f}', f'{float(f1):0.3f}'))
                     table_data = [headers]
-                    table_data += [result for result in results_2d]
+                    table_data += [result for result in results_per_category]
                     table = AsciiTable(table_data)
                     print_log('\n' + table.table, logger=logger)
 
@@ -556,7 +559,7 @@ class AutoDataset(CustomDataset):
                  metric='bbox',
                  logger=None,
                  jsonfile_prefix=None,
-                 classwise=False,
+                 classwise=True,
                  proposal_nums=(100, 300, 1000),
                  iou_thrs=None,
                  metric_items=None):
@@ -605,7 +608,7 @@ class AutoDataset(CustomDataset):
                                               metrics, logger, classwise,
                                               proposal_nums, iou_thrs,
                                               metric_items)
-
+        print(f"eval_results: {eval_results}")
         if tmp_dir is not None:
             tmp_dir.cleanup()
         return eval_results
