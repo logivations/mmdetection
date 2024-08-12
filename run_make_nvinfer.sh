@@ -27,6 +27,7 @@ network-type=100 # >3 disables post-processing
 cluster-mode=4 # 1=DBSCAN 4=No Clustering
 gie-unique-id=1
 output-tensor-meta=1
+tensor-meta-pool-size=200
 
 [custom]
 min_confidence = 0.5
