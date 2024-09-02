@@ -140,5 +140,5 @@ def extract_bounding_boxes(results, threshold=0.5):
                         float(y_max),
                         float(score),
                     )
-                    bboxes.append((x_min, x_max, y_min, y_max, idx, score))
+                    bboxes.append((x_min, x_max, y_min, y_max, idx, score ))
     return bboxes
