@@ -12,8 +12,6 @@ from typing import Dict
 from mmcv import Config, DictAction
 
 
-
-
 def get_map_from_file(file_path):
     with open(file_path) as f:
         for line in reversed(f.readlines()):
@@ -21,6 +19,23 @@ def get_map_from_file(file_path):
             if "bbox_mAP" in a and a["mode"]=="val":
                 return a["bbox_mAP"]
 
+
+def get_latest_f1_scores(file_path):
+    """
+    Extracts F1 scores from the latest 'val' entry in the auto.log.json file.
+    """
+    f1_scores = {}
+    with open(file_path, "r") as f:
+        for line in reversed(f.readlines()):
+            a = json.loads(line)
+            if "f1-score" in a and a["mode"] == "val":
+                for key, value in a.items():
+                    if key.endswith("_f1"):
+                        # new = f"f1 {key.replace('_f1', '')}"
+                        f1_scores[key] = float(value)
+                break
+
+    return f1_scores
 def write_string_as_file(path: str, string: str) -> None:
     f = open(path, "w")
     f.write(string)
@@ -84,6 +99,7 @@ def write_deepstream_config(cfg: Config, write_dir: str, name: str) -> None:
 def write_info_file(cfg: Config, write_dir: str) -> None:
     result_file = os.path.join(cfg.work_dir, "auto.log.json")
     mAP = get_map_from_file(result_file)
+    f1_scores = get_latest_f1_scores(result_file)
     train_img_folder = cfg["data"]["train"]["dataset"]["img_prefix"]
     val_img_folder = cfg["data"]["val"]["img_prefix"]
     num_tain_img = len(glob.glob(f"{train_img_folder}/*"))
@@ -96,6 +112,8 @@ def write_info_file(cfg: Config, write_dir: str) -> None:
                 f"Date trained: {date_trained}\n" \
                 f"Jira task: {cfg.jira_task}\n" \
                 f"Author: {cfg.author}\n"
+    for category, score in f1_scores.items():
+        info_file += f"{category}: {score}\n"
     write_path = os.path.join(write_dir, "model_info.txt")
     write_string_as_file(write_path, info_file)
 
