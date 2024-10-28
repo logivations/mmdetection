@@ -93,7 +93,7 @@ def write_deepstream_config(cfg: Config, write_dir: str, name: str) -> None:
                       f"min_confidence = 0.5\n" \
                       f"labels={';'.join(cfg.used_classes)}\n" \
                       f"report-labels={';'.join(cfg.used_classes)}\n"
-    write_path = os.path.join(write_dir, "object_config.txt")
+    write_path = os.path.join(write_dir, "object-config.txt")
     write_string_as_file(write_path, config_contents)
 
 def write_info_file(cfg: Config, write_dir: str) -> None:
