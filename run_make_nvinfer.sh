@@ -32,7 +32,7 @@ tensor-meta-pool-size=200
 [custom]
 min_confidence = 0.5
 labels=$CLASSES
-report_labels=$CLASSES
+report-labels=$CLASSES
 " > "$MODEL_DIR/object-config.txt"
 
 
