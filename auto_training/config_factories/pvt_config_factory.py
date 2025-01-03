@@ -3,12 +3,135 @@ from mmcv import Config
 from auto_training.utils.utils import parse_training_data_classes
 
 
+
+
+
 def make_pvt_cfg(data_path: str,
-                 input_res = (512, 384),
+                 input_res = (512, 512),
                  work_dir='./work_dirs/pvtb0',
                  keep_ratio = False,
-                 max_epochs=12
+                 max_epochs=12,
+                 aug_index=1,
+                 times=4
                  ):
+
+
+
+    auugmentation = {
+    0: [
+                    dict(type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        type='Resize',
+                        img_scale=[input_res],
+                        keep_ratio=keep_ratio),
+                    # dict(type='Rot90'),
+                    dict(type='RandomAffine'),
+                    dict(
+                        type='RandomCrop',
+                        crop_type='relative_range',
+                        crop_size=(0.5, 1.0),
+                        allow_negative_crop=True),
+                    dict(type='RandomFlip', flip_ratio=0.5),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='DefaultFormatBundle'),
+                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+    ],
+    1:[
+                    dict(type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        type='Resize',
+                        img_scale=[input_res],
+                        keep_ratio=keep_ratio),
+                    # dict(type='Rot90'),
+                    dict(
+                        type='RandomCrop',
+                        crop_type='relative_range',
+                        crop_size=(0.5, 1.0),
+                        allow_negative_crop=True),
+                    dict(type='RandomFlip', flip_ratio=0.5),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='DefaultFormatBundle'),
+                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+    ],
+    2:[
+                    dict(type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        type='Resize',
+                        img_scale=[input_res],
+                        keep_ratio=keep_ratio),
+                    # dict(type='Rot90'),
+                    dict(type='RandomAffine'),
+                    dict(type='RandomFlip', flip_ratio=0.5),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='DefaultFormatBundle'),
+                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+
+    ],
+    3:[
+                    dict(type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        type='Resize',
+                        img_scale=[input_res],
+                        keep_ratio=keep_ratio),
+                    # dict(type='Rot90'),
+                    dict(type='RandomAffine'),
+                    dict(
+                        type='RandomCrop',
+                        crop_type='relative_range',
+                        crop_size=(0.5, 1.0),
+                        allow_negative_crop=True),
+                    dict(type='RandomFlip', flip_ratio=0.5),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='DefaultFormatBundle'),
+                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+    ],
+    4: [
+                    dict(type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        type='Resize',
+                        img_scale=[input_res],
+                        keep_ratio=keep_ratio),
+                    dict(type='RandomFlip', flip_ratio=0.5),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='DefaultFormatBundle'),
+                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+
+        ],
+    }
+
+
+
+
 
     cfg = Config()
     cfg.work_dir = work_dir
@@ -73,35 +196,12 @@ def make_pvt_cfg(data_path: str,
         workers_per_gpu=2,
         train=dict(
             type='RepeatDataset',
-            times=8,
+            times=times,
             dataset=dict(
                 type=cfg.dataset_type,
                 ann_file=cfg.train_ann_file,
                 img_prefix=cfg.train_img_prefix,
-                pipeline=[
-                    dict(type='LoadImageFromFile'),
-                    dict(type='LoadAnnotations', with_bbox=True),
-                    dict(
-                        type='Resize',
-                        img_scale=[input_res],
-                        keep_ratio=keep_ratio),
-                    # dict(type='Rot90'),
-                    dict(type='RandomAffine'),
-                    dict(
-                        type='RandomCrop',
-                        crop_type='relative_range',
-                        crop_size=(0.5, 1.0),
-                        allow_negative_crop=True),
-                    dict(type='RandomFlip', flip_ratio=0.5),
-                    dict(
-                        type='Normalize',
-                        mean=[123.675, 116.28, 103.53],
-                        std=[58.395, 57.12, 57.375],
-                        to_rgb=True),
-                    dict(type='Pad', size_divisor=32),
-                    dict(type='DefaultFormatBundle'),
-                    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
-                ])),
+                pipeline=auugmentation[aug_index])),
         val=dict(
             type=cfg.dataset_type,
             ann_file=cfg.val_ann_file,
