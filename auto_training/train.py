@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument(
         '--training-res',
         type=int,
-        default=[512, 384],
+        default=[512, 512],
         nargs='+',
         help='Training resolution')
     parser.add_argument(
