@@ -37,13 +37,12 @@ RES=$(IFS=';' ; echo "${RES[*]}")
 
 echo "[property]
 onnx-file=pvt_detector.onnx
-infer-dims=3;384;512
+infer-dims=3;$RES
 
 [custom]
 # 1 - PVT, 2 - DEIM, 3 - TAO
 detector-type=1
 min_confidence = 0.5
-res=$RES
 labels=$CLASSES
 report-labels=$CLASSES
 " > "$MODEL_DIR/object-config.txt"
