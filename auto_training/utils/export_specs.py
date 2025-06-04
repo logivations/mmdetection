@@ -132,7 +132,7 @@ def export_for_lv(args):
         cfg.project_name = cfg["data"]["train"]["dataset"]["ann_file"].split("/")[1]
     cfg.jira_task = args.jira_task
     cfg.author = args.author
-    export_folder = os.path.join(cfg.work_dir, "export")
+    export_folder = os.path.join(cfg.work_dir, "result")
     recreate_dir(export_folder)
     model_name = "pvt_detector"
     write_detector_yaml(cfg=cfg, write_dir=export_folder, name=model_name)
